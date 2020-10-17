@@ -42,18 +42,7 @@ import store from './store'
 </Provider>
 ```
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-=======
-
 # Create a basic project
-
-> > > > > > > # Stashed changes
-
-## Create a basic project
-
-> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Lets start by importing a new `todo` reducer and combining it within the `reducers` file:
 
@@ -111,12 +100,6 @@ This will go into the actions file:
 ```
 export const ADD_TODO_ACTION_TYPE = 'ADD_TODO'
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-=======
-=======
->>>>>>> 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 export const addTodo = todo => ({
     type: ADD_TODO_ACTION_TYPE,
     payload: {
@@ -266,15 +249,7 @@ const enhancer = composeEnhancers(applyMiddleware());
 export default createStore(reducers, enhancer);
 ```
 
-<<<<<<< HEAD
-
 # Adding redux thunk
-
-=======
-
-## Adding redux thunk
-
-> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Lets start by adding the dependency
 
@@ -298,15 +273,7 @@ export default createStore(reducers, enhancer);
 
 3. Rename all files to ingredients
 
-<<<<<<< HEAD
-
 # Using async actions
-
-=======
-
-## Using async actions
-
-> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Create a new `recipes` reducer with some empty state:
 
@@ -470,15 +437,7 @@ return (
   );
 ```
 
-<<<<<<< HEAD
-
 # Using reselect
-
-=======
-
-## Using reselect
-
-> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Create the `recipe` component and copy paste the content:
 
@@ -586,9 +545,3 @@ export const getIngredients = createSelector(
     }
 )
 ```
-
-<<<<<<< HEAD
-
-> > > > > > > # Stashed changes
-> > > > > > >
-> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
