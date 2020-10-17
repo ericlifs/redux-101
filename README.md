@@ -1,81 +1,122 @@
 # This project was created as a dev guide for my personal tech talk called "Redux 101".
 
-<<<<<<< Updated upstream
-## Available Scripts
-=======
 # Installing and setting up redux
->>>>>>> Stashed changes
 
-In the project directory, you can run:
+1. Install our key libraries by running:
 
-### `yarn start`
+```
+yarn add redux react-redux
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. Create three folders within `src`: `actions`, `reducers`, and `store`
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+3. Within the `store` folder create a `index.js` file with this content:
 
-### `yarn test`
+```
+import { createStore } from 'redux';
+import reducers from '../reducers';
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export default createStore(reducers);
+```
 
-### `yarn build`
+4. Now we have to create our main reducer file by creating an `index.js` file within the `reducers` folder:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+import { combineReducers } from 'redux';
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+const rootReducer = combineReducers({
+  // ... What should we write in here?
+});
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+export default rootReducer;
+```
 
-### `yarn eject`
+5. Import the provider and use it within `src/index.js` just by wrapping our app
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+import { Provider } from 'redux'
+import store from './store'
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<Provider store={store}>
+  <App />
+</Provider>
+```
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 =======
+
 # Create a basic project
->>>>>>> Stashed changes
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+> > > > > > > # Stashed changes
 
-## Learn More
+## Create a basic project
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Lets start by importing a new `todo` reducer and combining it within the `reducers` file:
 
-### Code Splitting
+```
+import { combineReducers } from 'redux';
+import todos from './todos';
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+const rootReducer = combineReducers({
+  todos
+});
 
-### Analyzing the Bundle Size
+export default rootReducer;
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+2. Lets create the `todos` reducer itself:
 
-### Making a Progressive Web App
+```
+const defaultState = {
+    todos: []
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+const todosReducer = (state = defaultState, action) => {
+    const { type, payload } = action;
 
-### Advanced Configuration
+    switch (type) {
+        case 'ADD_TODO':
+            return {
+                ...state,
+                todos: [...state.todos, payload.todo]
+            };
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+        default:
+            return state;
+    }
+}
 
-### Deployment
+export default todosReducer;
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+3. Lets create the `actions` file for our todos reducer:
 
-### `yarn build` fails to minify
+```
+export const addTodo = todo => ({
+    type: 'ADD_TODO',
+    payload: {
+        todo
+    },
+});
+```
 
+4. We can now extract our hardcoded `ADD_TODO` string into a const:
+
+This will go into the actions file:
+
+```
+export const ADD_TODO_ACTION_TYPE = 'ADD_TODO'
+
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 =======
+=======
+>>>>>>> 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 export const addTodo = todo => ({
     type: ADD_TODO_ACTION_TYPE,
     payload: {
@@ -225,7 +266,15 @@ const enhancer = composeEnhancers(applyMiddleware());
 export default createStore(reducers, enhancer);
 ```
 
+<<<<<<< HEAD
+
 # Adding redux thunk
+
+=======
+
+## Adding redux thunk
+
+> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Lets start by adding the dependency
 
@@ -249,7 +298,15 @@ export default createStore(reducers, enhancer);
 
 3. Rename all files to ingredients
 
+<<<<<<< HEAD
+
 # Using async actions
+
+=======
+
+## Using async actions
+
+> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Create a new `recipes` reducer with some empty state:
 
@@ -413,7 +470,15 @@ return (
   );
 ```
 
+<<<<<<< HEAD
+
 # Using reselect
+
+=======
+
+## Using reselect
+
+> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
 
 1. Create the `recipe` component and copy paste the content:
 
@@ -521,4 +586,9 @@ export const getIngredients = createSelector(
     }
 )
 ```
->>>>>>> Stashed changes
+
+<<<<<<< HEAD
+
+> > > > > > > # Stashed changes
+> > > > > > >
+> > > > > > > 8681bdab9faa39c6a27cf087f9df8b1d411531cc
