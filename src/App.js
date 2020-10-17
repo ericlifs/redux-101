@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { addIngredient } from './actions/ingredients';
 import { fetchRecipes } from './actions/recipes';
 import './App.css';
+import Ingredients from './components/ingredients';
+import Recipes from './components/recipes';
 
 function App(props) {
   const [inputValue, setInputValue] = useState('');
@@ -22,44 +24,15 @@ function App(props) {
     }
   }
 
-  const onFetchRecipesClick = () => {
-    props.fetchRecipes(props.ingredients.data)
-  }
-
   return (
     <div className="App">
       <input type="text" onChange={onInputValueChange} value={inputValue} />
-      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
+      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add ingredient</button>
 
-      <section className="ingredients">
-        <h1>Ingredients</h1>
-        <ul>
-          {props.ingredients.data.map(ingredient => (
-            <li key={ingredient}>{ingredient}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="recipes">
-        <h1>Recipes</h1>
-        <button onClick={onFetchRecipesClick} disabled={!props.ingredients.data.length}>Search recipes</button>
-        <ul>
-          {props.recipes.data.map(recipe => (
-            <li key={recipe.title}>{recipe.title}</li>
-          ))}
-        </ul>
-      </section>
+      <Ingredients />
+      <Recipes />
     </div>
   );
-}
-
-const mapStateToProps = (state) => {
-  const { ingredients, recipes } = state;
-
-  return {
-    ingredients,
-    recipes
-  }
 }
 
 const mapDispatchToProps = {
@@ -67,4 +40,4 @@ const mapDispatchToProps = {
   fetchRecipes
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

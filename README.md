@@ -299,7 +299,7 @@ export default recipesReducer;
 2. Create an empty `recipes` actions file with the action scaffolding:
 
 ```
-export const fetchRecipes = (ingredients) => {
+export const fetchRecipes = () => {
     return async (dispatch) => {
         // Dispatch an initial action
 
@@ -336,12 +336,13 @@ const fetchRecipesError = (error) => ({
     payload: { error }
 })
 
-export const fetchRecipes = (ingredients) => {
-    return async (dispatch) => {
+export const fetchRecipes = () => {
+    return async (dispatch, getState) => {
+        const { ingredients } = getState();
         dispatch(fetchRecipesStart());
 
         try {
-            const res = await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.join(',')}`);
+            const res = await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.data.join(',')}`);
             const jsonRes = await res.json();
 
             dispatch(fetchRecipesSuccess(jsonRes.results));
@@ -412,7 +413,7 @@ const rootReducer = combineReducers({
 return (
     <div className="App">
       <input type="text" onChange={onInputValueChange} value={inputValue} />
-      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
+      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add ingredient</button>
 
       <section className="ingredients">
         <h1>Ingredients</h1>
@@ -434,4 +435,113 @@ return (
       </section>
     </div>
   );
+```
+
+## Using reselect
+
+1. Create the `recipe` component and copy paste the content:
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+import { fetchRecipes } from '../actions/recipes';
+
+const Recipes = (props) => {
+    return (
+        <section className="recipes">
+            <h1>Recipes</h1>
+            <button onClick={props.fetchRecipes}>Search recipes</button>
+            <ul>
+                {props.recipes.data.map(recipe => (
+                    <li key={recipe.title}>{recipe.title}</li>
+                ))}
+            </ul>
+        </section>
+    )
+}
+
+const mapStateToProps = (state) => {
+    const { recipes } = state;
+
+    return {
+        recipes
+    }
+}
+
+const mapDispatchToProps = {
+    fetchRecipes
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Recipes);
+```
+
+2. Create the `ingredients` component and copy paste the content:
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+
+const Ingredients = (props) => {
+    return (
+        <section className="ingredients">
+            <h1>Ingredients</h1>
+            <ul>
+                {props.ingredients.data.map(ingredient => (
+                    <li key={ingredient}>{ingredient}</li>
+                ))}
+            </ul>
+        </section>
+    )
+}
+
+const mapStateToProps = (state) => {
+    const { ingredients } = state;
+
+    return {
+        ingredients
+    }
+}
+
+export default connect(mapStateToProps)(Ingredients);
+```
+
+3. Create a dummy selector without reselect within the Ingredients component and show how this function gets called everytime that any field from the state changes (even when the recipes are fetched):
+
+```
+const transformIngredientsToUpperCase = ingredients => {
+    console.log('Transforms the ingredients lists');
+
+    return ingredients.data.map(ingredient => ingredient.toUpperCase().substring(0, 7))
+}
+
+const mapStateToProps = (state) => {
+    const { ingredients } = state;
+
+    return {
+        ingredients: transformIngredientsToUpperCase(ingredients)
+    }
+}
+```
+
+4. Install react-reselect:
+
+```
+yarn add reselect
+```
+
+5. Create a `ingredients.js` within a new `selectors` folder:
+
+```
+import { createSelector } from 'reselect';
+
+const ingredientsSelector = state => state.ingredients.data
+
+export const getIngredients = createSelector(
+    [ingredientsSelector],
+    ingredients => {
+        console.log('Recalculates and maps the ingredients', );
+
+        return ingredients.map(ingredient => ingredient.toUpperCase().substring(0, 7))
+    }
+)
 ```
