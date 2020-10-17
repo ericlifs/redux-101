@@ -16,15 +16,15 @@ const fetchRecipesError = (error) => ({
     payload: { error }
 })
 
-export const fetchRecipes = (ingredients) => {
-    return async (dispatch) => {
+export const fetchRecipes = () => {
+    return async (dispatch, getState) => {
+        const { ingredients } = getState();
+
         dispatch(fetchRecipesStart());
         
         try {
-            const res = await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.join(',')}`);
+            const res = await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.data.join(',')}`);
             const jsonRes = await res.json();
-
-            console.log(jsonRes.results)
 
             dispatch(fetchRecipesSuccess(jsonRes.results));           
         } catch(err) {
