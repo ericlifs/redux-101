@@ -1,7 +1,7 @@
 import { ADD_INGREDIENT_ACTION_TYPE } from '../actions/ingredients';
 
 const defaultState = {
-    ingredients: []
+    data: []
 }
 
 const ingredientsReducer = (state = defaultState, action) => {
@@ -11,7 +11,7 @@ const ingredientsReducer = (state = defaultState, action) => {
         case ADD_INGREDIENT_ACTION_TYPE:
             return {
                 ...state,
-                ingredients: [...state.ingredients, payload.ingredient]
+                data: [...state.data, payload.ingredient]
             };
     
         default:
