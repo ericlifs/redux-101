@@ -248,3 +248,27 @@ const enhancer = composeEnhancers(applyMiddleware());
 
 export default createStore(reducers, enhancer);
 ```
+
+## Adding redux thunk
+
+1. Lets start by adding the dependency
+
+```
+yarn add redux-thunk
+```
+
+2. Import the middleware and apply it to our store creator
+
+```
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import reducers from '../reducers';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const enhancer = composeEnhancers(applyMiddleware(thunk));
+
+export default createStore(reducers, enhancer);
+```
+
+3. Rename all files to ingredients

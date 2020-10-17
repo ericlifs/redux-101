@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from './actions/todos';
+import { addIngredient } from './actions/ingredients';
 import './App.css';
 
 function App(props) {
@@ -16,7 +16,7 @@ function App(props) {
     const trimmedValue = inputValue.trim();
 
     if (trimmedValue) {
-      props.addTodo(trimmedValue)
+      props.addIngredient(trimmedValue)
       setInputValue('')
     }
   }
@@ -26,9 +26,9 @@ function App(props) {
       <input type="text" onChange={onInputValueChange} value={inputValue} />
       <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
 
-      <ul className="todo-list">
-        {props.todos.map(todo => (
-          <li key={todo}>{todo}</li>
+      <ul className="ingredient-list">
+        {props.ingredients.map(ingredient => (
+          <li key={ingredient}>{ingredient}</li>
         ))}
       </ul>
     </div>
@@ -36,15 +36,15 @@ function App(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { todos } = state;
+  const { ingredients } = state;
 
   return {
-    todos: todos.todos,
+    ingredients: ingredients.ingredients,
   }
 }
 
 const mapDispatchToProps = {
-  addTodo
+  addIngredient
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
