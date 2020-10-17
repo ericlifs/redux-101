@@ -248,3 +248,190 @@ const enhancer = composeEnhancers(applyMiddleware());
 
 export default createStore(reducers, enhancer);
 ```
+
+## Adding redux thunk
+
+1. Lets start by adding the dependency
+
+```
+yarn add redux-thunk
+```
+
+2. Import the middleware and apply it to our store creator
+
+```
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import reducers from '../reducers';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const enhancer = composeEnhancers(applyMiddleware(thunk));
+
+export default createStore(reducers, enhancer);
+```
+
+3. Rename all files to ingredients
+
+## Using async actions
+
+1. Create a new `recipes` reducer with some empty state:
+
+```
+const defaultState = {
+    data: [],
+    isFetching: false,
+    error: null,
+}
+
+const recipesReducer = (state = defaultState, action) => {
+    const { type } = action;
+
+    switch (type) {
+        default:
+            return state;
+    }
+}
+
+export default recipesReducer;
+```
+
+2. Create an empty `recipes` actions file with the action scaffolding:
+
+```
+export const fetchRecipes = (ingredients) => {
+    return async (dispatch) => {
+        // Dispatch an initial action
+
+        try {
+            // Do the fetch itself
+            await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.join(',')}`);
+
+            // Dispatch successful action
+        } catch(err) {
+            // Dispatch error action
+        }
+    }
+}
+```
+
+3. This should be the final version of the actions:
+
+```
+export const FETCH_RECIPES_START_ACTION_TYPE = 'FETCH_RECIPES_START';
+export const FETCH_RECIPES_SUCCESS_ACTION_TYPE = 'FETCH_RECIPES_SUCCESS';
+export const FETCH_RECIPES_ERROR_ACTION_TYPE = 'FETCH_RECIPES_ERROR';
+
+const fetchRecipesStart = () => ({
+    type: FETCH_RECIPES_START_ACTION_TYPE
+})
+
+const fetchRecipesSuccess = (results) => ({
+    type: FETCH_RECIPES_SUCCESS_ACTION_TYPE,
+    payload: { results }
+})
+
+const fetchRecipesError = (error) => ({
+    type: FETCH_RECIPES_ERROR_ACTION_TYPE,
+    payload: { error }
+})
+
+export const fetchRecipes = (ingredients) => {
+    return async (dispatch) => {
+        dispatch(fetchRecipesStart());
+
+        try {
+            const res = await fetch(`http://www.recipepuppy.com/api/?i=${ingredients.join(',')}`);
+            const jsonRes = await res.json();
+
+            dispatch(fetchRecipesSuccess(jsonRes.results));
+        } catch(err) {
+            dispatch(fetchRecipesError(err));
+        }
+    }
+}
+```
+
+4. Go step by step completing the reducer until you have this as the content:
+
+```
+import { FETCH_RECIPES_ERROR_ACTION_TYPE, FETCH_RECIPES_START_ACTION_TYPE, FETCH_RECIPES_SUCCESS_ACTION_TYPE } from '../actions/recipes';
+
+const defaultState = {
+    data: [],
+    isFetching: false,
+    error: null,
+}
+
+const recipesReducer = (state = defaultState, action) => {
+    const { type, payload } = action;
+
+    switch (type) {
+        case FETCH_RECIPES_START_ACTION_TYPE:
+            return {
+                ...state,
+                data: [],
+                isFetching: true,
+                error: null,
+            }
+
+        case FETCH_RECIPES_SUCCESS_ACTION_TYPE:
+            return {
+                ...state,
+                isFetching: false,
+                data: payload.results
+            }
+
+        case FETCH_RECIPES_ERROR_ACTION_TYPE:
+            return {
+                ...state,
+                isFetching: false,
+                error: payload.error
+            }
+
+        default:
+            return state;
+    }
+}
+
+export default recipesReducer
+```
+
+5. Add the reducer to the combineReducer call:
+
+```
+const rootReducer = combineReducers({
+  ingredients,
+  recipes,
+});
+```
+
+6. Change the returned JSX element from the app to the following and start pluging things together:
+
+```
+return (
+    <div className="App">
+      <input type="text" onChange={onInputValueChange} value={inputValue} />
+      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
+
+      <section className="ingredients">
+        <h1>Ingredients</h1>
+        <ul>
+          {props.ingredients.data.map(ingredient => (
+            <li key={ingredient}>{ingredient}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="recipes">
+        <h1>Recipes</h1>
+        <button onClick={onFetchRecipesClick} disabled={!props.ingredients.data.length}>Search recipes</button>
+        <ul>
+          {props.recipes.data.map(recipe => (
+            <li key={recipe.title}>{recipe.title}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+```
