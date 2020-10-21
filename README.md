@@ -52,34 +52,49 @@ import store from './store'
 
 # Create a basic project
 
-1. Lets start by importing a new `todo` reducer and combining it within the `reducers` file:
+1. Lets start by importing a new `ingredients` reducer and combining it within the `reducers` file:
 
 ```
 import { combineReducers } from 'redux';
-import todos from './todos';
+import ingredients from './ingredients';
 
 const rootReducer = combineReducers({
-  todos
+  ingredients
 });
 
 export default rootReducer;
 ```
 
-2. Lets create the `todos` reducer itself:
+2. Lets create the `actions` file for our ingredients reducer:
 
 ```
+export const ADD_INGREDIENT_ACTION_TYPE = 'ADD_INGREDIENT'
+
+export const addIngredient = ingredient => ({
+    type: ADD_INGREDIENT_ACTION_TYPE,
+    payload: {
+        ingredient
+    },
+});
+```
+
+3. Lets create the `ingredients` reducer itself:
+
+```
+import { ADD_INGREDIENT_ACTION_TYPE } from '../actions/ingredients';
+
 const defaultState = {
-    todos: []
+    data: []
 }
 
-const todosReducer = (state = defaultState, action) => {
+const ingredientsReducer = (state = defaultState, action) => {
     const { type, payload } = action;
 
     switch (type) {
-        case 'ADD_TODO':
+        case ADD_INGREDIENT_ACTION_TYPE:
             return {
                 ...state,
-                todos: [...state.todos, payload.todo]
+                data: [...state.data, payload.todo]
             };
 
         default:
@@ -90,60 +105,7 @@ const todosReducer = (state = defaultState, action) => {
 export default todosReducer;
 ```
 
-3. Lets create the `actions` file for our todos reducer:
-
-```
-export const addTodo = todo => ({
-    type: 'ADD_TODO',
-    payload: {
-        todo
-    },
-});
-```
-
-4. We can now extract our hardcoded `ADD_TODO` string into a const:
-
-This will go into the actions file:
-
-```
-export const ADD_TODO_ACTION_TYPE = 'ADD_TODO'
-
-export const addTodo = todo => ({
-    type: ADD_TODO_ACTION_TYPE,
-    payload: {
-        todo
-    },
-});
-```
-
-And this within the reducer:
-
-```
-import { ADD_TODO_ACTION_TYPE } from '../actions/todos';
-
-const defaultState = {
-    todos: []
-}
-
-const todosReducer = (state = defaultState, action) => {
-    const { type, payload } = action;
-
-    switch (type) {
-        case ADD_TODO_ACTION_TYPE:
-            return {
-                ...state,
-                todos: [...state.todos, payload.todo]
-            };
-
-        default:
-            return state;
-    }
-}
-
-export default todosReducer;
-```
-
-5. Change the app css styles to:
+4. Change the app css styles to:
 
 ```
 .App {
@@ -155,7 +117,7 @@ export default todosReducer;
 }
 ```
 
-6. Change the `App.js` file content to:
+5. Change the `App.js` file content to:
 
 ```
 import React, { useState } from 'react';
@@ -179,7 +141,7 @@ function App() {
   return (
     <div className="App">
       <input type="text" onChange={onInputValueChange} value={inputValue} />
-      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
+      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add ingredient</button>
     </div>
   );
 }
@@ -187,12 +149,12 @@ function App() {
 export default App;
 ```
 
-7. Now we have to connect our component to redux store
+6. Now we have to connect our component to redux store
 
 ```
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from './actions/todos';
+import { addIngredient } from './actions/ingredients';
 import './App.css';
 
 function App(props) {
@@ -208,7 +170,7 @@ function App(props) {
     const trimmedValue = inputValue.trim();
 
     if (trimmedValue) {
-      props.addTodo(trimmedValue)
+      props.addIngredient(trimmedValue)
       setInputValue('')
     }
   }
@@ -216,11 +178,11 @@ function App(props) {
   return (
     <div className="App">
       <input type="text" onChange={onInputValueChange} value={inputValue} />
-      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add todo</button>
+      <button onClick={onSubmit} disabled={inputValue.trim() === ''}>Add ingredient</button>
 
       <ul className="todo-list">
-        {props.todos.map(todo => (
-          <li key={todo}>{todo}</li>
+        {props.ingredients.map(ingredient => (
+          <li key={ingredient}>{tingredientodo}</li>
         ))}
       </ul>
     </div>
@@ -228,15 +190,15 @@ function App(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { todos } = state;
+  const { ingredients } = state;
 
   return {
-    todos: todos.todos,
+    ingredients: ingredients.data,
   }
 }
 
 const mapDispatchToProps = {
-  addTodo
+  addIngredient
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
@@ -278,8 +240,6 @@ const enhancer = composeEnhancers(applyMiddleware(thunk));
 
 export default createStore(reducers, enhancer);
 ```
-
-3. Rename all files to ingredients
 
 # Using async actions
 
