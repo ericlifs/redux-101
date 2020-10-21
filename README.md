@@ -1,5 +1,13 @@
 # This project was created as a dev guide for my personal tech talk called "Redux 101".
 
+# Create a CRA project
+
+Run the following command:
+
+```
+npx create-react-app my-app
+```
+
 # Installing and setting up redux
 
 1. Install our key libraries by running:
